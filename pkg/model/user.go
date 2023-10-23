@@ -1,5 +1,7 @@
 package model
 
+import "github.com/dgrijalva/jwt-go"
+
 type User struct {
 	ID       uint64 `json:"id" gorm:"primaryKey; autoIncrement" `
 	UserName string `json:"user_name" gorm:"not null; unique; index"`
@@ -17,4 +19,10 @@ type Auth struct {
 
 func (t *Auth) TableName() string {
 	return "auth"
+}
+
+type AccessTokenClaim struct {
+	jwt.StandardClaims
+	AuthID uint64 `json:"authId" `
+	UserID uint64 `json:"userId" `
 }

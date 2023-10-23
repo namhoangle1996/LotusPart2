@@ -21,7 +21,7 @@ func VerifyToken() gin.HandlerFunc {
 
 		token := tokenStr[1]
 
-		_, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		parseToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
@@ -31,6 +31,12 @@ func VerifyToken() gin.HandlerFunc {
 			c.JSON(http.StatusForbidden, "Invalid Token")
 			c.Abort()
 			return
+		}
+
+		claims, ok := parseToken.Claims.(jwt.MapClaims) //the token claims should conform to MapClaims
+		if ok && parseToken.Valid {
+			c.Set("authId", claims["authId"])
+			c.Set("userId", claims["userId"])
 		}
 
 		c.Next()

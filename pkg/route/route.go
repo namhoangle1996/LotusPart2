@@ -48,7 +48,7 @@ func StartNewService() *Service {
 
 	v1Api.POST("/user/register", ginext.WrapHandler(handlers.Register))
 	v1Api.POST("/user/login", ginext.WrapHandler(handlers.Login))
-	v1Api.POST("/user/logout", ginext.WrapHandler(handlers.Logout)) // logout => revoke token
+	v1Api.POST("/user/logout", middleware.VerifyToken(), ginext.WrapHandler(handlers.Logout)) // logout => revoke token
 
 	// file
 	v1Api.POST("/file/upload", middleware.VerifyToken(), ginext.WrapHandler(handlers.UploadFile))

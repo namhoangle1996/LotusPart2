@@ -136,13 +136,13 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 // @Success 200 {object} model.User
 // @Router /api/v1/user/logout [post]
 func (h *UserHandler) Logout(r *ginext.Request) (*ginext.Response, error) {
-	authHeader := r.GinCtx.GetHeader("Authorization")
+	authIdHeader := r.GinCtx.GetFloat64("authId")
 
-	rs, err := h.service.Logout(r.GinCtx, authHeader)
+	err := h.service.Logout(r.GinCtx, authIdHeader)
 	if err != nil {
 		r.GinCtx.JSON(http.StatusForbidden, err)
 		return nil, nil
 	}
 
-	return ginext.NewResponseData(http.StatusOK, rs), nil
+	return ginext.NewResponseData(http.StatusOK, "Logged out"), nil
 }

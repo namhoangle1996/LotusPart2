@@ -10,14 +10,15 @@ import (
 	"gitlab.com/goxp/cloud0/ginext"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"time"
 )
 
 type UserService struct {
 	repo repo.PGInterface
 }
 
-func (s *UserService) Logout(ctx context.Context, token string) (*model.User, error) {
-
+func (s *UserService) Logout(ctx context.Context, authId float64) error {
+	return nil
 }
 
 func (s *UserService) UploadFile(ctx context.Context, req model.RegisterRequest) error {
@@ -52,7 +53,7 @@ func NewUserService(repo repo.PGInterface) UserInterface {
 type UserInterface interface {
 	Login(ctx context.Context, req model.LoginRequest) (*model.LoginResponse, error)
 	Register(ctx context.Context, req model.RegisterRequest) (*model.User, error)
-	Logout(ctx context.Context, token string) (*model.User, error)
+	Logout(ctx context.Context, authId float64) error
 
 	UploadFile(ctx context.Context, req model.RegisterRequest) error
 }
@@ -94,9 +95,21 @@ func checkPasswordHash(password, hash string) bool {
 }
 
 func createToken(authD model.Auth) (string, error) {
-	claims := jwt.MapClaims{}
-	claims["auth_uuid"] = authD.ID
-	claims["user_id"] = authD.UserID
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	expiredAt := time.Now().Add(time.Minute * time.Duration(5)).Unix()
+	claims := &jwt.StandardClaims{
+		Audience:  "audience",
+		ExpiresAt: expiredAt,
+		Issuer:    "issuer",
+		Subject:   "subject",
+	}
+
+	claim := model.AccessTokenClaim{
+		StandardClaims: *claims,
+		AuthID:         authD.ID,
+		UserID:         authD.UserID,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	return token.SignedString([]byte(conf.LoadEnv().API_SECRET))
 }
