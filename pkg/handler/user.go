@@ -4,7 +4,6 @@ import (
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/service"
 	"LotusPart2/pkg/utils"
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"gitlab.com/goxp/cloud0/ginext"
 	"io"
@@ -43,7 +42,6 @@ func (h *UserHandler) Login(r *ginext.Request) (*ginext.Response, error) {
 
 	rs, err := h.service.Login(r.GinCtx, req)
 	if err != nil {
-		fmt.Println("err", err)
 		r.GinCtx.JSON(http.StatusForbidden, err)
 		return nil, nil
 	}
@@ -116,8 +114,9 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 		panic(err)
 	}
 	defer dst.Close()
+
 	if _, err = io.Copy(dst, src); err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	//err = h.service.UploadFile(r.GinCtx, model.RegisterRequest{})
@@ -126,4 +125,24 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 	//}
 
 	return ginext.NewResponseData(http.StatusOK, nil), err
+}
+
+// @Tags User
+// @Security ApiKeyAuth
+// @Summary Logout
+// @Description Logout
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.User
+// @Router /api/v1/user/logout [post]
+func (h *UserHandler) Logout(r *ginext.Request) (*ginext.Response, error) {
+	authHeader := r.GinCtx.GetHeader("Authorization")
+
+	rs, err := h.service.Logout(r.GinCtx, authHeader)
+	if err != nil {
+		r.GinCtx.JSON(http.StatusForbidden, err)
+		return nil, nil
+	}
+
+	return ginext.NewResponseData(http.StatusOK, rs), nil
 }

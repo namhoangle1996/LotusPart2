@@ -1,6 +1,7 @@
 package service
 
 import (
+	"LotusPart2/conf"
 	"LotusPart2/pkg/constant"
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/repo"
@@ -9,11 +10,14 @@ import (
 	"gitlab.com/goxp/cloud0/ginext"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"os"
 )
 
 type UserService struct {
 	repo repo.PGInterface
+}
+
+func (s *UserService) Logout(ctx context.Context, token string) (*model.User, error) {
+
 }
 
 func (s *UserService) UploadFile(ctx context.Context, req model.RegisterRequest) error {
@@ -48,6 +52,7 @@ func NewUserService(repo repo.PGInterface) UserInterface {
 type UserInterface interface {
 	Login(ctx context.Context, req model.LoginRequest) (*model.LoginResponse, error)
 	Register(ctx context.Context, req model.RegisterRequest) (*model.User, error)
+	Logout(ctx context.Context, token string) (*model.User, error)
 
 	UploadFile(ctx context.Context, req model.RegisterRequest) error
 }
@@ -93,5 +98,5 @@ func createToken(authD model.Auth) (string, error) {
 	claims["auth_uuid"] = authD.ID
 	claims["user_id"] = authD.UserID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(os.Getenv("API_SECRET")))
+	return token.SignedString([]byte(conf.LoadEnv().API_SECRET))
 }

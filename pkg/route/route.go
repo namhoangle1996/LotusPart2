@@ -3,6 +3,7 @@ package route
 import (
 	"LotusPart2/pkg/handler"
 	"LotusPart2/pkg/infra"
+	"LotusPart2/pkg/middleware"
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/repo"
 	internalService "LotusPart2/pkg/service"
@@ -47,9 +48,10 @@ func StartNewService() *Service {
 
 	v1Api.POST("/user/register", ginext.WrapHandler(handlers.Register))
 	v1Api.POST("/user/login", ginext.WrapHandler(handlers.Login))
+	v1Api.POST("/user/logout", ginext.WrapHandler(handlers.Logout)) // logout => revoke token
 
 	// file
-	v1Api.POST("/file/upload", ginext.WrapHandler(handlers.UploadFile))
+	v1Api.POST("/file/upload", middleware.VerifyToken(), ginext.WrapHandler(handlers.UploadFile))
 
 	// Migrate
 	return s
