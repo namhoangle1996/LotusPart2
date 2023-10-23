@@ -17,14 +17,13 @@ type Service struct {
 	*service.BaseApp
 }
 
-func NewService() *Service {
+func StartNewService() *Service {
 
 	s := &Service{
 		BaseApp: service.NewApp("Service user", "v1.0"),
 	}
 
 	// Set max memory limit to 8Mib for multipart forms
-	s.Router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	dbConn := infra.PostgresConn()
 	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}); err != nil {
@@ -50,7 +49,7 @@ func NewService() *Service {
 	v1Api.POST("/user/login", ginext.WrapHandler(handlers.Login))
 
 	// file
-	v1Api.POST("/upload", ginext.WrapHandler(handlers.UploadFile))
+	v1Api.POST("/file/upload", ginext.WrapHandler(handlers.UploadFile))
 
 	// Migrate
 	return s

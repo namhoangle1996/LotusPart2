@@ -35,7 +35,7 @@ func main() {
 	conf.SetEnv()
 	logger.Init(APPNAME)
 
-	app := route.NewService()
+	app := route.StartNewService()
 	ctx := context.Background()
 	err := app.Start(ctx)
 	if err != nil {

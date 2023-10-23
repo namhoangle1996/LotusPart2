@@ -5,9 +5,11 @@ import (
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/repo"
 	"context"
+	"github.com/dgrijalva/jwt-go"
 	"gitlab.com/goxp/cloud0/ginext"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"os"
 )
 
 type UserService struct {
@@ -52,7 +54,7 @@ type UserInterface interface {
 
 func (s *UserService) Login(ctx context.Context, req model.LoginRequest) (res *model.LoginResponse, err error) {
 	getUser, err := s.repo.GetUserByUserName(ctx, req.UserName)
-	if err == nil {
+	if err != nil {
 		return nil, ginext.NewError(http.StatusBadRequest, constant.ERR_NOT_EXIST_ACC_USERNAME)
 	}
 
@@ -60,7 +62,24 @@ func (s *UserService) Login(ctx context.Context, req model.LoginRequest) (res *m
 		return nil, ginext.NewError(http.StatusForbidden, constant.ERR_INCORRECT_ACC_PASS)
 	}
 
-	return res, err
+	authData := model.Auth{
+		UserID: getUser.ID,
+	}
+	err = s.repo.CreateAuth(ctx, &authData)
+	if err != nil {
+		return
+	}
+
+	token, err := createToken(authData)
+	if err != nil {
+		return nil, err
+	}
+
+	var resp = model.LoginResponse{
+		Token: token,
+	}
+
+	return &resp, err
 
 }
 
@@ -69,11 +88,10 @@ func checkPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-//func createToken(authD AuthDetails) (string, error) {
-//	claims := jwt.MapClaims{}
-//	claims["authorized"] = true
-//	claims["auth_uuid"] = authD.AuthUuid
-//	claims["user_id"] = authD.UserId
-//	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-//	return token.SignedString([]byte(os.Getenv("API_SECRET")))
-//}
+func createToken(authD model.Auth) (string, error) {
+	claims := jwt.MapClaims{}
+	claims["auth_uuid"] = authD.ID
+	claims["user_id"] = authD.UserID
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(os.Getenv("API_SECRET")))
+}

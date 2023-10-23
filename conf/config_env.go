@@ -14,6 +14,8 @@ type AppConfig struct {
 	DBPass   string `env:"DB_PASS" envDefault:"postgres"`
 	DBName   string `env:"DB_NAME" envDefault:"service_user"`
 	EnableDB string `env:"ENABLE_DB" envDefault:"true"`
+
+	API_SECRET string `env:"API_SECRET" envDefault:"as@NCIQ3A0!"`
 }
 
 var config AppConfig

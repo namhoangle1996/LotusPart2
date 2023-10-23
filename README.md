@@ -5,7 +5,7 @@ Tài liệu mô tả cấu trúc source đang sử dụng tại Sobanhang
 # Note
 * Framework : go-gin (https://github.com/gin-gonic/gin)
 * Document  : swagger: (https://github.com/swaggo/gin-swagger)
-* Go version : 1.16 trở lên
+* Go version : above 1.16 
 
 ## Getting started
 ![alt text](https://raw.githubusercontent.com/bxcodec/go-clean-arch/master/clean-arch.png)

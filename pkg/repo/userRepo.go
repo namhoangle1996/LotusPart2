@@ -19,10 +19,21 @@ func (r *RepoPG) CreateUser(ctx context.Context, req *model.User) error {
 	return nil
 }
 
+func (r *RepoPG) CreateAuth(ctx context.Context, req *model.Auth) error {
+	log := logger.WithCtx(ctx, "RepoPG.CreateAuth")
+
+	if err := r.db.WithContext(ctx).Create(req).Error; err != nil {
+		log.WithError(err).Error("Error when call func CreateAuth")
+		return ginext.NewError(http.StatusInternalServerError, err.Error())
+	}
+
+	return nil
+}
+
 func (r *RepoPG) GetUserByUserName(ctx context.Context, userName string) (rs *model.User, err error) {
 	log := logger.WithCtx(ctx, "RepoPG.GetUserByUserName")
 
-	if err := r.db.Where("user_name =? ", userName).Take(&rs).Error; err != nil {
+	if err := r.db.Where("user_name = ? ", userName).Take(&rs).Error; err != nil {
 		log.WithError(err).Error("Error when call func GetUserByUserName")
 		return rs, err
 	}
