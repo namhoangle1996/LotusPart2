@@ -2,6 +2,8 @@ package route
 
 import (
 	"LotusPart2/pkg/handler"
+	"LotusPart2/pkg/infra"
+	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/repo"
 	internalService "LotusPart2/pkg/service"
 	"github.com/go-playground/validator/v10"
@@ -16,20 +18,26 @@ type Service struct {
 }
 
 func NewService() *Service {
+
 	s := &Service{
-		service.NewApp("Service user", "v1.0"),
+		BaseApp: service.NewApp("Service user", "v1.0"),
 	}
 
-	validate := validator.New()
+	// Set max memory limit to 8Mib for multipart forms
+	s.Router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
-	// repo
-	db := s.GetDB()
-	repoPG := repo.NewPGRepo(db)
+	dbConn := infra.PostgresConn()
+	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}); err != nil {
+		panic(err)
+	}
+
+	repository := repo.NewPGRepo(dbConn)
 
 	// service
-	userService := internalService.NewUserService(repoPG)
+	userService := internalService.NewUserService(repository)
 
 	// handle
+	validate := validator.New()
 	handlers := handler.NewUserHandler(userService, validate)
 
 	v1Api := s.Router.Group("/api/v1")
@@ -42,7 +50,7 @@ func NewService() *Service {
 	v1Api.POST("/user/login", ginext.WrapHandler(handlers.Login))
 
 	// file
-	v1Api.POST("/file/upload", ginext.WrapHandler(handlers.Login))
+	v1Api.POST("/upload", ginext.WrapHandler(handlers.UploadFile))
 
 	// Migrate
 	return s

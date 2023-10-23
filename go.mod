@@ -15,6 +15,6 @@ require (
 	github.com/swaggo/swag v1.8.1
 	gitlab.com/goxp/cloud0 v1.8.1
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
-	gorm.io/driver/postgres v1.2.3 // indirect
+	gorm.io/driver/postgres v1.2.3
 	gorm.io/gorm v1.22.4
 )

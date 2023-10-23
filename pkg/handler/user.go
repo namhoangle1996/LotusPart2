@@ -63,3 +63,25 @@ func (h *UserHandler) Register(r *ginext.Request) (*ginext.Response, error) {
 
 	return ginext.NewResponseData(http.StatusOK, rs), nil
 }
+
+// Upload file
+// @Tags User
+// @Security ApiKeyAuth
+// @Summary // Upload file
+// @Description // Upload file
+// @Accept  json
+// @Produce  json
+// @Param data body model.RegisterRequest true "body data"
+// @Success 200 {object} model.User
+// @Router /api/v1/file/upload [post]
+func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
+	var req model.RegisterRequest
+	r.MustBind(&req)
+
+	err := h.service.UploadFile(r.GinCtx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return ginext.NewResponseData(http.StatusOK, nil), nil
+}

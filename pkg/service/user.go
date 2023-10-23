@@ -14,6 +14,11 @@ type UserService struct {
 	repo repo.PGInterface
 }
 
+func (s *UserService) UploadFile(ctx context.Context, req model.RegisterRequest) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (s *UserService) Register(ctx context.Context, req model.RegisterRequest) (res *model.User, err error) {
 	_, err = s.repo.GetUserByUserName(ctx, req.UserName)
 	if err == nil {
@@ -41,6 +46,8 @@ func NewUserService(repo repo.PGInterface) UserInterface {
 type UserInterface interface {
 	Login(ctx context.Context, req model.LoginRequest) (*model.LoginResponse, error)
 	Register(ctx context.Context, req model.RegisterRequest) (*model.User, error)
+
+	UploadFile(ctx context.Context, req model.RegisterRequest) error
 }
 
 func (s *UserService) Login(ctx context.Context, req model.LoginRequest) (res *model.LoginResponse, err error) {
