@@ -1,8 +1,8 @@
 package repo
 
 import (
+	"LotusPart2/pkg/model"
 	"context"
-	"finan/mvt-adapter/pkg/model"
 	"gorm.io/gorm"
 )
 

@@ -1,22 +1,19 @@
 package main
 
 import (
+	"LotusPart2/conf"
+	"LotusPart2/pkg/route"
 	"context"
-	"finan/mvt-adapter/conf"
-	"finan/mvt-adapter/pkg/route"
-	"finan/mvt-adapter/pkg/utils"
 	"os"
 
 	"gitlab.com/goxp/cloud0/logger"
-
-	_ "finan/mvt-adapter/docs"
 )
 
 const (
-	APPNAME = "DEMO"
+	APPNAME = "USER SVC"
 )
 
-// @title DEMO API
+// @title USER SVC API
 // @version 1.0
 // @description This is DEMO api docs.
 // @termsOfService http://swagger.io/terms/
@@ -37,7 +34,6 @@ const (
 func main() {
 	conf.SetEnv()
 	logger.Init(APPNAME)
-	utils.LoadMessageError()
 
 	app := route.NewService()
 	ctx := context.Background()

@@ -1,9 +1,9 @@
 package route
 
 import (
-	"finan/mvt-adapter/pkg/handler"
-	"finan/mvt-adapter/pkg/repo"
-	service2 "finan/mvt-adapter/pkg/service"
+	"LotusPart2/pkg/handler"
+	"LotusPart2/pkg/repo"
+	internalService "LotusPart2/pkg/service"
 	"github.com/go-playground/validator/v10"
 	swaggerFiles "github.com/swaggo/files"
 	swagger "github.com/swaggo/gin-swagger"
@@ -27,7 +27,7 @@ func NewService() *Service {
 	repoPG := repo.NewPGRepo(db)
 
 	// service
-	userService := service2.NewUserService(repoPG)
+	userService := internalService.NewUserService(repoPG)
 
 	// handle
 	handlers := handler.NewUserHandler(userService, validate)

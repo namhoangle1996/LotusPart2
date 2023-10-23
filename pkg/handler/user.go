@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"finan/mvt-adapter/pkg/model"
-	"finan/mvt-adapter/pkg/service"
+	"LotusPart2/pkg/model"
+	"LotusPart2/pkg/service"
 	"github.com/go-playground/validator/v10"
 	"gitlab.com/goxp/cloud0/ginext"
 	"net/http"

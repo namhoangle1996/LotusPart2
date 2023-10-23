@@ -1,17 +1,17 @@
 package repo
 
 import (
+	"LotusPart2/pkg/model"
 	"context"
-	"finan/mvt-adapter/pkg/model"
 	"gitlab.com/goxp/cloud0/ginext"
 	"gitlab.com/goxp/cloud0/logger"
 	"net/http"
 )
 
-func (r *RepoPG) CreateUser(ctx context.Context, mission *model.User) error {
+func (r *RepoPG) CreateUser(ctx context.Context, req *model.User) error {
 	log := logger.WithCtx(ctx, "RepoPG.CreateUser")
 
-	if err := r.db.WithContext(ctx).Create(mission).Error; err != nil {
+	if err := r.db.WithContext(ctx).Create(req).Error; err != nil {
 		log.WithError(err).Error("Error when call func CreateUser")
 		return ginext.NewError(http.StatusInternalServerError, err.Error())
 	}

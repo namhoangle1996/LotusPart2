@@ -1,10 +1,10 @@
 package service
 
 import (
+	"LotusPart2/pkg/constant"
+	"LotusPart2/pkg/model"
+	"LotusPart2/pkg/repo"
 	"context"
-	"finan/mvt-adapter/pkg/constant"
-	"finan/mvt-adapter/pkg/model"
-	"finan/mvt-adapter/pkg/repo"
 	"gitlab.com/goxp/cloud0/ginext"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
