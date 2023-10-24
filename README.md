@@ -4,6 +4,7 @@
 * Go version : above 1.16 
 
 # Step
+- git checkout main (final branch)
 - Run docker-compose.yaml ( running Postgresql)
 - Create database user_auth 
 - Run command : go run main.go
