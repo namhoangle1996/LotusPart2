@@ -6,6 +6,7 @@ import (
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/repo"
 	"context"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"gitlab.com/goxp/cloud0/ginext"
 	"golang.org/x/crypto/bcrypt"
@@ -29,7 +30,12 @@ func (s *UserService) UploadFile(ctx context.Context, userId, authId int64, file
 		return ginext.NewError(http.StatusForbidden, "Token is invalid")
 	}
 
-	//s.repo.saveFile()
+	go func() {
+		err := s.repo.SaveFile(context.Background(), &file)
+		if err != nil {
+			fmt.Println("err  saving file into database : ", err.Error())
+		}
+	}()
 	return nil
 }
 

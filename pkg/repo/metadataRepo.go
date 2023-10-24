@@ -73,3 +73,14 @@ func (r *RepoPG) GetUserByUserId(ctx context.Context, userId int) (rs *model.Use
 
 	return rs, nil
 }
+
+func (r *RepoPG) SaveFile(ctx context.Context, file *model.File) error {
+	log := logger.WithCtx(ctx, "RepoPG.SaveFile")
+
+	if err := r.db.WithContext(ctx).Create(file).Error; err != nil {
+		log.WithError(err).Error("Error when call func SaveFile")
+		return ginext.NewError(http.StatusInternalServerError, err.Error())
+	}
+
+	return nil
+}

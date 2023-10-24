@@ -83,7 +83,6 @@ func (h *UserHandler) Register(r *ginext.Request) (*ginext.Response, error) {
 // @Description // Upload file
 // @Accept  json
 // @Produce  json
-// @Param data body model.RegisterRequest true "body data"
 // @Success 200 {object} model.User
 // @Router /api/v1/file/upload [post]
 func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {

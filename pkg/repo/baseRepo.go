@@ -18,6 +18,8 @@ type PGInterface interface {
 	CreateAuth(ctx context.Context, req *model.Auth) error
 	DeleteAuthByUserId(ctx context.Context, userId int64) error
 	GetAuthByIdAndUserId(ctx context.Context, userId, authId int64) (*model.Auth, error)
+
+	SaveFile(ctx context.Context, file *model.File) error
 }
 
 type RepoPG struct {
