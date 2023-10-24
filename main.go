@@ -6,16 +6,17 @@ import (
 	"context"
 	"os"
 
+	_ "LotusPart2/docs"
 	"gitlab.com/goxp/cloud0/logger"
 )
 
 const (
-	APPNAME = "USER SVC"
+	APPNAME = "eLotus SVC"
 )
 
-// @title USER SVC API
+// @title eLotus SVC API
 // @version 1.0
-// @description This is DEMO api docs.
+// @description This is eLotus SVC api docs.
 // @termsOfService http://swagger.io/terms/
 
 // @securityDefinitions.apikey ApiKeyAuth
