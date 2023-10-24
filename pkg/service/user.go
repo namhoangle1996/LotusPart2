@@ -23,7 +23,7 @@ func (s *UserService) Logout(ctx context.Context, userId int64) error {
 	return s.repo.DeleteAuthByUserId(ctx, userId)
 }
 
-func (s *UserService) UploadFile(ctx context.Context, userId, authId int64) error {
+func (s *UserService) UploadFile(ctx context.Context, userId, authId int64, file model.File) error {
 	_, err := s.repo.GetAuthByIdAndUserId(ctx, userId, authId)
 	if err != nil {
 		return ginext.NewError(http.StatusForbidden, "Token is invalid")
@@ -62,7 +62,7 @@ type UserInterface interface {
 	Register(ctx context.Context, req model.RegisterRequest) (*model.User, error)
 	Logout(ctx context.Context, userId int64) error
 
-	UploadFile(ctx context.Context, userIdHeader, authId int64) error
+	UploadFile(ctx context.Context, userIdHeader, authId int64, file model.File) error
 }
 
 func (s *UserService) Login(ctx context.Context, req model.LoginRequest) (res *model.LoginResponse, err error) {

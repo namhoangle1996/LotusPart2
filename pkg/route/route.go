@@ -21,11 +21,8 @@ type Service struct {
 func StartNewService() *Service {
 
 	s := &Service{
-		BaseApp: service.NewApp("Service user", "v1.0"),
+		BaseApp: service.NewApp("ELOTUS test", "v1.0"),
 	}
-
-	// Set max memory limit to 8Mib for multipart forms
-	s.Router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	dbConn := infra.PostgresConn()
 	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}, &model.File{}); err != nil {

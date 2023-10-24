@@ -6,6 +6,7 @@ import (
 	"LotusPart2/pkg/service"
 	"LotusPart2/pkg/utils"
 	"github.com/go-playground/validator/v10"
+	"github.com/jackc/pgtype"
 	"gitlab.com/goxp/cloud0/ginext"
 	"io"
 	"net/http"
@@ -128,7 +129,13 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 	userIdHeader := r.GinCtx.GetFloat64("userId")
 	authIdHeader := r.GinCtx.GetFloat64("authId")
 
-	err = h.service.UploadFile(r.GinCtx, int64(userIdHeader), int64(authIdHeader))
+	fileModel := model.File{
+		UserId:      uint64(userIdHeader),
+		Size:        uint64(file.Size),
+		ContentType: filetype,
+		HttpInfo:    pgtype.JSONB{}, // save more http info here (jsonb type)
+	}
+	err = h.service.UploadFile(r.GinCtx, int64(userIdHeader), int64(authIdHeader), fileModel)
 	if err != nil {
 		return nil, err
 	}
