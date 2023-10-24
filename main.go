@@ -6,7 +6,6 @@ import (
 	"context"
 	"os"
 
-	_ "LotusPart2/docs"
 	"gitlab.com/goxp/cloud0/logger"
 )
 
