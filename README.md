@@ -1,58 +1,56 @@
-# Template
-
-Tài liệu mô tả cấu trúc source đang sử dụng tại Sobanhang
 
 # Note
 * Framework : go-gin (https://github.com/gin-gonic/gin)
-* Document  : swagger: (https://github.com/swaggo/gin-swagger)
 * Go version : above 1.16 
 
-## Getting started
-![alt text](https://raw.githubusercontent.com/bxcodec/go-clean-arch/master/clean-arch.png)
+# Step
+- Run docker-compose.yaml ( running Postgresql)
+- Create database user_auth 
+- Run command : go run main.go
 
-Project có 4 lớp chính  :
-* Models Layer     (pkg/model)   - lớp thực thể
-* Repository Layer (pkg/repo)    - lớp tương tác dữ liệu database
-* Usecase Layer    (pkg/service) - lớp xử lý logic 
-* Delivery Layer   (pkg/handler) - lớp delivery, hiện đang dùng restful
-
-# Chi tiết các folder, files
-
-### Folder **_conf_**
-* Mô tả config cấu hình mà project sử dụng. Hiện đang sử dụng biến môi trường (env)
-
-### Folder **_docs_**
-* Folder này chứa file swagger được auto generate 
+## Register
 ```bash
-# Command
-$ swag init
+curl --location 'localhost:8088/api/v1/user/register' \
+--header 'Content-Type: application/json' \
+--data '{
+    "user_name" : "namhoangle1996", 
+    "password" : "123456"
+}'
 ```
 
-### Folder **_pkg_**
-#### apis
-* Folder này chứa các interface và implement cho function gọi đến những microservice khác
-#### handlers
-* Folder này chứa các Restful handler , tương tác với lớp logic (pkg/service)
-#### middleware
-* Khai báo middleware sử dụng 
-#### model
-* Mô tả những đối tượng 
-#### pubsub
-* Viết những function gửi/nhận đến Queue qua restful
-#### repo
-* Tương tác database
-#### route
-* Khai báo những endpoint API 
-#### service
-* lớp xử lý logic 
-#### utils
-* chứa các hàm utility  
-
-#### Run the Applications with hot reload (Local testing env) 
-
+## Login 
 ```bash
-# Command
-$ bash run-local.sh
-
+curl --location 'localhost:8088/api/v1/user/login' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdWRpZW5jZSIsImV4cCI6MTY5ODA4MjM3NywiaXNzIjoiaXNzdWVyIiwic3ViIjoic3ViamVjdCIsImF1dGhJZCI6OCwidXNlcklkIjoxfQ.b06W30R1VkPpXDv-mN0D-Kz7zbrGbS6aYn9EzN6wtfc' \
+--header 'Content-Type: application/json' \
+--data '{
+    "user_name" : "namhoangle1996", 
+    "password" : "123456"
+}'
 ```
+
+## Log out 
+```bash
+curl --location --request POST 'localhost:8088/api/v1/user/logout' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdWRpZW5jZSIsImV4cCI6MTY5ODA4MjM3NywiaXNzIjoiaXNzdWVyIiwic3ViIjoic3ViamVjdCIsImF1dGhJZCI6OCwidXNlcklkIjoxfQ.b06W30R1VkPpXDv-mN0D-Kz7zbrGbS6aYn9EzN6wtfc'
+```
+
+
+## Upload 
+```bash
+curl --location 'localhost:8088/api/v1/file/upload' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdWRpZW5jZSIsImV4cCI6MTY5ODEyMDI0NiwiaXNzIjoiaXNzdWVyIiwic3ViIjoic3ViamVjdCIsImF1dGhJZCI6MTIsInVzZXJJZCI6MX0.hPtgWuoofRHV004x05_CZV7EsAVY8jOClBkE6HabsIA' \
+--form 'data=@"/Users/macprom116256/Downloads/11111.jpg"'
+```
+
+
+## Register
+![img_1.png](img_1.png)
+
+## Login 
+![img.png](img.png)
+
+## Upload file
+![img_2.png](img_2.png)
+
 
