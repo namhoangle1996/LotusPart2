@@ -10,10 +10,6 @@ type RegisterRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
-type UploadFileRequest struct {
-	File string `json:"file" form:"file" validate:"required"`
-}
-
 type LoginResponse struct {
 	Token string `json:"token"`
 }
