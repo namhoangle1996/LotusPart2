@@ -17,6 +17,8 @@ type UserService struct {
 	repo repo.PGInterface
 }
 
+// you can also implement revokening token by a cache approaching
+// Save tokens to redis with expiration time and delete them when user log out.
 func (s *UserService) Logout(ctx context.Context, userId int64) error {
 	return s.repo.DeleteAuthByUserId(ctx, userId)
 }

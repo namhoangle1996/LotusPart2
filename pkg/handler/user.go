@@ -109,7 +109,7 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 		return nil, nil
 	}
 
-	dst, err := os.Create(filepath.Join("tmp", filepath.Base(file.Filename))) // dir is directory where you want to save file.
+	dst, err := os.Create(filepath.Join("tmp", filepath.Base(file.Filename))) //  save file to tmp folder
 	if err != nil {
 		panic(err)
 	}

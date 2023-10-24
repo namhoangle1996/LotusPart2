@@ -25,6 +25,7 @@ func StartNewService() *Service {
 	}
 
 	// Set max memory limit to 8Mib for multipart forms
+	s.Router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	dbConn := infra.PostgresConn()
 	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}); err != nil {
