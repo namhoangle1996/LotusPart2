@@ -119,10 +119,13 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 		return nil, err
 	}
 
-	//err = h.service.UploadFile(r.GinCtx, model.RegisterRequest{})
-	//if err != nil {
-	//	return nil, err
-	//}
+	userIdHeader := r.GinCtx.GetInt64("userId")
+	authIdHeader := r.GinCtx.GetInt64("authId")
+
+	err = h.service.UploadFile(r.GinCtx, userIdHeader, authIdHeader)
+	if err != nil {
+		return nil, err
+	}
 
 	return ginext.NewResponseData(http.StatusOK, nil), err
 }
@@ -136,9 +139,9 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 // @Success 200 {object} model.User
 // @Router /api/v1/user/logout [post]
 func (h *UserHandler) Logout(r *ginext.Request) (*ginext.Response, error) {
-	authIdHeader := r.GinCtx.GetFloat64("authId")
+	userIdHeader := r.GinCtx.GetInt64("userId")
 
-	err := h.service.Logout(r.GinCtx, authIdHeader)
+	err := h.service.Logout(r.GinCtx, userIdHeader)
 	if err != nil {
 		r.GinCtx.JSON(http.StatusForbidden, err)
 		return nil, nil

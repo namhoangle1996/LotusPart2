@@ -17,13 +17,18 @@ type UserService struct {
 	repo repo.PGInterface
 }
 
-func (s *UserService) Logout(ctx context.Context, authId float64) error {
-	return nil
+func (s *UserService) Logout(ctx context.Context, userId int64) error {
+	return s.repo.DeleteAuthByUserId(ctx, userId)
 }
 
-func (s *UserService) UploadFile(ctx context.Context, req model.RegisterRequest) error {
-	//TODO implement me
-	panic("implement me")
+func (s *UserService) UploadFile(ctx context.Context, userId, authId int64) error {
+	_, err := s.repo.GetAuthByIdAndUserId(ctx, userId, authId)
+	if err != nil {
+		return ginext.NewError(http.StatusForbidden, "Token is invalid")
+	}
+
+	//s.repo.saveFile()
+	return nil
 }
 
 func (s *UserService) Register(ctx context.Context, req model.RegisterRequest) (res *model.User, err error) {
@@ -53,9 +58,9 @@ func NewUserService(repo repo.PGInterface) UserInterface {
 type UserInterface interface {
 	Login(ctx context.Context, req model.LoginRequest) (*model.LoginResponse, error)
 	Register(ctx context.Context, req model.RegisterRequest) (*model.User, error)
-	Logout(ctx context.Context, authId float64) error
+	Logout(ctx context.Context, userId int64) error
 
-	UploadFile(ctx context.Context, req model.RegisterRequest) error
+	UploadFile(ctx context.Context, userIdHeader, authId int64) error
 }
 
 func (s *UserService) Login(ctx context.Context, req model.LoginRequest) (res *model.LoginResponse, err error) {

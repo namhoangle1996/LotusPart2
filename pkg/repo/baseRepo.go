@@ -16,6 +16,8 @@ type PGInterface interface {
 	GetUserByUserId(ctx context.Context, userId int) (*model.User, error)
 
 	CreateAuth(ctx context.Context, req *model.Auth) error
+	DeleteAuthByUserId(ctx context.Context, userId int64) error
+	GetAuthByIdAndUserId(ctx context.Context, userId, authId int64) (*model.Auth, error)
 }
 
 type RepoPG struct {
