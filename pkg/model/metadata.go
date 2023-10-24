@@ -1,6 +1,10 @@
 package model
 
-import "github.com/dgrijalva/jwt-go"
+import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/jackc/pgtype"
+	"time"
+)
 
 type User struct {
 	ID       uint64 `json:"id" gorm:"primaryKey; autoIncrement" `
@@ -25,4 +29,17 @@ type AccessTokenClaim struct {
 	jwt.StandardClaims
 	AuthID uint64 `json:"authId" `
 	UserID uint64 `json:"userId" `
+}
+
+type File struct {
+	ID          uint64       `json:"id" gorm:"primaryKey; autoIncrement" `
+	UserId      uint64       `json:"user_id" `
+	Size        uint64       `json:"size" `
+	ContentType string       `json:"content_type" `
+	HttpInfo    pgtype.JSONB `json:"http_info" `
+	CreatedAt   time.Time    `gorm:"column:created_at;default:CURRENT_TIMESTAMP" json:"created_at"`
+}
+
+func (t *File) TableName() string {
+	return "file"
 }

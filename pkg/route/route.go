@@ -28,7 +28,7 @@ func StartNewService() *Service {
 	s.Router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	dbConn := infra.PostgresConn()
-	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}); err != nil {
+	if err := dbConn.Debug().AutoMigrate(&model.User{}, &model.Auth{}, &model.File{}); err != nil {
 		panic(err)
 	}
 

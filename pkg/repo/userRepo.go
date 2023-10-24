@@ -43,7 +43,7 @@ func (r *RepoPG) DeleteAuthByUserId(ctx context.Context, userId int64) error {
 func (r *RepoPG) GetAuthByIdAndUserId(ctx context.Context, userId, authId int64) (rs *model.Auth, err error) {
 	log := logger.WithCtx(ctx, "RepoPG.GetAuthByIdAndUserId")
 
-	if err = r.db.Where("user_id = ? ", userId).Where("auth_id = ? ", authId).
+	if err = r.db.Where("user_id = ? ", userId).Where("id = ? ", authId).
 		Take(&rs).Error; err != nil {
 		log.WithError(err).Error("Error when call func GetAuthByIdAndUserId")
 		return rs, err

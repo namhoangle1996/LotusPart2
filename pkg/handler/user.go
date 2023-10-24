@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"LotusPart2/pkg/constant"
 	"LotusPart2/pkg/model"
 	"LotusPart2/pkg/service"
 	"LotusPart2/pkg/utils"
@@ -90,6 +91,11 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 		return nil, err
 	}
 
+	if file.Size > constant.MaxFileSize {
+		r.GinCtx.JSON(http.StatusBadRequest, constant.ERR_INCORRECT_FILE_SIZE)
+		return nil, nil
+	}
+
 	src, err := file.Open()
 	if err != nil {
 		panic(err)
@@ -119,10 +125,10 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 		return nil, err
 	}
 
-	userIdHeader := r.GinCtx.GetInt64("userId")
-	authIdHeader := r.GinCtx.GetInt64("authId")
+	userIdHeader := r.GinCtx.GetFloat64("userId")
+	authIdHeader := r.GinCtx.GetFloat64("authId")
 
-	err = h.service.UploadFile(r.GinCtx, userIdHeader, authIdHeader)
+	err = h.service.UploadFile(r.GinCtx, int64(userIdHeader), int64(authIdHeader))
 	if err != nil {
 		return nil, err
 	}
@@ -139,9 +145,9 @@ func (h *UserHandler) UploadFile(r *ginext.Request) (*ginext.Response, error) {
 // @Success 200 {object} model.User
 // @Router /api/v1/user/logout [post]
 func (h *UserHandler) Logout(r *ginext.Request) (*ginext.Response, error) {
-	userIdHeader := r.GinCtx.GetInt64("userId")
+	userIdHeader := r.GinCtx.GetFloat64("userId")
 
-	err := h.service.Logout(r.GinCtx, userIdHeader)
+	err := h.service.Logout(r.GinCtx, int64(userIdHeader))
 	if err != nil {
 		r.GinCtx.JSON(http.StatusForbidden, err)
 		return nil, nil
