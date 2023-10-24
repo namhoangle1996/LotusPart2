@@ -31,7 +31,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Register",
+                "description": "// Upload file",
                 "consumes": [
                     "application/json"
                 ],
@@ -41,18 +41,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Register",
-                "parameters": [
-                    {
-                        "description": "body data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.RegisterRequest"
-                        }
-                    }
-                ],
+                "summary": "// Upload file",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -92,6 +81,34 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/logout": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Logout",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout",
                 "responses": {
                     "200": {
                         "description": "OK",

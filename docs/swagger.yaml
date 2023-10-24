@@ -47,14 +47,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Register
-      parameters:
-      - description: body data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.RegisterRequest'
+      description: // Upload file
       produces:
       - application/json
       responses:
@@ -64,7 +57,7 @@ paths:
             $ref: '#/definitions/model.User'
       security:
       - ApiKeyAuth: []
-      summary: Register
+      summary: // Upload file
       tags:
       - User
   /api/v1/user/login:
@@ -89,6 +82,23 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Login
+      tags:
+      - User
+  /api/v1/user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Logout
       tags:
       - User
   /api/v1/user/register:
